@@ -22,7 +22,10 @@ S = [0, 0]
 G = [0, 0]
 
 def getWeight(Row, Column): # for any other weight
-    return Grid[Row][Column]
+    if Grid[Row][Column] == "S" or Grid[Row][Column] == "G":
+        return 1
+    else:
+        return Grid[Row][Column]
 
 # map all to the table
 while i < total_nodes:
@@ -39,8 +42,8 @@ while i < total_nodes:
 i = 0
 row = 0
 column = 0
-while i < total_nodes:
-    while row < Rows:
+while i < total_nodes: # loop runs inf
+    while row < Rows: 
         if getWeight(row, column) == "S":
             Table[str(row)+""+str(column)] = [0, ""]
         if getWeight(row + 1, column) < (getWeight(row - 1, column) and getWeight(row, column + 1) and getWeight(row, column - 1)): # right
@@ -49,9 +52,22 @@ while i < total_nodes:
                 Visited.append([row, column])
             Table[str(row)+""+str(column)] = [NodeWeight]
         elif getWeight(row - 1, column) < (getWeight(row + 1, column) and getWeight(row, column + 1) and getWeight(row, column - 1)): # left
-            row -= 1
+            if [row -1, column] not in Visited:
+                row -= 1
+                Visited.append([row, column])
+            Table[str(row)+""+str(column)] = [NodeWeight]
+        elif getWeight(row, column + 1) < (getWeight(row + 1, column) and getWeight(row - 1, column) and getWeight(row, column - 1)): # up
+            if [row, column + 1] not in Visited:
+                column += 1
+                Visited.append([row, column])
+            Table[str(row)+""+str(column)] = [NodeWeight]
+        elif getWeight(row, column - 1) < (getWeight(row + 1, column) and getWeight(row, column + 1) and getWeight(row - 1, column)): # down
+            if [row, column - 1] not in Visited:
+                column -= 1
+                Visited.append([row, column])
             Table[str(row)+""+str(column)] = [NodeWeight]
         
+print(Table)
 
 
         
